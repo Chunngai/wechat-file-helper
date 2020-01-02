@@ -78,9 +78,10 @@ def wechat_file_helper():
     parser = argparse.ArgumentParser(description="wechat_file_helper.py - a tool for sending and receiving "
                                                  + "text messages and files from wechat file helper")
 
-    parser.add_argument("--send", "-s", action="append", nargs="+", dest="send_list",
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--send", "-s", action="append", nargs="+", dest="send_list",
                         help="send text messages or files")
-    parser.add_argument("--receive", "-r", action="store_true", help="receive text messages or files")
+    group.add_argument("--receive", "-r", action="store_true", help="receive text messages or files")
 
     parser.add_argument("--text", "-t", action="store_true", help="text messages to be sent")
     parser.add_argument("--file", "-f", action="store_true", help="files to be sent")
