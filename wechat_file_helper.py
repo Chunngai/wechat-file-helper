@@ -75,7 +75,7 @@ def wechat_file_helper():
     #                               [-f | --file]
     #                               [-h | --help]
 
-    parser = argparse.ArgumentParser(description="wechat_file_helper - a tool for sending and receiving "
+    parser = argparse.ArgumentParser(description="wechat_file_helper.py - a tool for sending and receiving "
                                                  + "text messages and files from wechat file helper")
 
     parser.add_argument("--send", "-s", action="append", nargs="+", dest="send_list",
