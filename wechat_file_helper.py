@@ -69,12 +69,6 @@ def logout():
 
 
 def wechat_file_helper():
-    # python3 wechat_file_helper.py [-s | --send SEND_LIST ...]
-    #                               [-r | --receive [PATH]]
-    #                               [-t | --text]
-    #                               [-f | --file]
-    #                               [-h | --help]
-
     parser = argparse.ArgumentParser(description="wechat_file_helper.py - a tool for sending and receiving "
                                                  + "text messages and files from wechat file helper")
 
