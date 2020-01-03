@@ -76,13 +76,13 @@ def logout():
     itchat.logout()
 
 
-def wechat_file_helper():
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="wechat_file_helper.py - a tool for sending and receiving "
                                                  + "text messages and files from wechat file helper")
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--send", "-s", action="append", nargs="+", dest="send_list",
-                        help="send text messages or files")
+                       help="send text messages or files")
     group.add_argument("--receive", "-r", action="store_true", help="receive text messages or files")
 
     parser.add_argument("--text", "-t", action="store_true", help="text messages to be sent")
@@ -120,7 +120,3 @@ def wechat_file_helper():
 
             # receives files from file helper
             receive_files(args.path)
-
-
-if __name__ == '__main__':
-    wechat_file_helper()
