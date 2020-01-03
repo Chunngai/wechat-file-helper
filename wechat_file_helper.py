@@ -20,6 +20,14 @@ def send_text_msgs(text_msg_list):
 
 def send_files(src_file_path_list):
     for src_file_path in src_file_path_list[0]:
+        # checks if the file exists
+        if not os.path.exists(src_file_path):
+            print("wechat_file_helper.py: error: file {} does not exist".format(src_file_path))
+            continue
+        if not os.path.isfile(src_file_path):
+            print("wechat_file_helper.py: error: {} is not a file".format(src_file_path))
+            continue
+
         print("sending file: {}".format(src_file_path))
 
         itchat.send_file(src_file_path, toUserName="filehelper")
