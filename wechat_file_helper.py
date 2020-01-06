@@ -7,63 +7,37 @@ import argparse
 import itchat
 
 
-def send_text_msgs(text_msg_list):
-    for text_msg in text_msg_list[0]:
-        print("sending text message: {}".format(text_msg))
+def send(send_list):
+    for msg in send_list[0]:
+        if os.path.isfile(msg):  # sends files
+            print("sending file: {}".format(msg))
 
-        itchat.send(text_msg, toUserName="filehelper")
+            itchat.send_file(msg, toUserName="filehelper")
+        else:  # sends text msgs
+            print("sending text message: {}".format(msg))
 
-        print("done")
+            itchat.send(msg, toUserName="filehelper")
 
-    logout()
-
-
-def send_files(src_file_path_list):
-    for src_file_path in src_file_path_list[0]:
-        # checks if the file exists
-        if not os.path.exists(src_file_path):
-            print("wechat_file_helper.py: error: file {} does not exist".format(src_file_path))
-            continue
-        if not os.path.isfile(src_file_path):
-            print("wechat_file_helper.py: error: {} is not a file".format(src_file_path))
-            continue
-
-        print("sending file: {}".format(src_file_path))
-
-        itchat.send_file(src_file_path, toUserName="filehelper")
-
-        print("done")
+            print("done")
 
     logout()
 
 
-def receive_text_msgs():
-    print("receiving text messages")
-
-    @itchat.msg_register(itchat.content.TEXT)
-    def print_content(msg):
-        content = msg["Text"]
-
-        if content == "#":  # "#" stops receiving and logs out wechat
-            logout()
-        else:
-            print(msg["Text"])
-
-    itchat.run()
-
-
-def receive_files(dest_file_path):
-    print("receiving files")
+def receive(dest_file_path):
+    print("receiving messages")
 
     @itchat.msg_register(["Text", "Picture", "Recording", "Attachment", "Video"])
-    def download_files(msg):
+    def download(msg):
         content = msg["Text"]
 
         if content == "#":  # "#" stops receiving and logs out wechat
             logout()
         else:
-            content(os.path.join(dest_file_path, msg["FileName"]))
-            print("received {}".format(msg["FileName"]))
+            try:  # receives files
+                content(os.path.join(dest_file_path, msg["FileName"]))
+                print("received file: {}".format(msg["FileName"]))
+            except:  # receives text msgs
+                print("received text message: \n{}".format(msg["Text"]))
 
     itchat.run()
 
@@ -85,38 +59,19 @@ if __name__ == '__main__':
                        help="send text messages or files")
     group.add_argument("--receive", "-r", action="store_true", help="receive text messages or files")
 
-    parser.add_argument("--text", "-t", action="store_true", help="text messages to be sent")
-    parser.add_argument("--file", "-f", action="store_true", help="files to be sent")
     parser.add_argument("--path", "-p", action="store", dest="path", default="/home/neko/Downloads/",
                         help="path for storing downloaded files")
 
     args = parser.parse_args()
 
+    # checks if the path exists
+    if args.path and not os.path.exists(args.path):
+        print("wechat_file_helper.py: error: path not exists")
+        exit(1)
+
+    login()
+
     if args.send_list:
-        # logs in wechat
-        login()
-
-        if args.text:
-            # sends text messages to file helper
-            send_text_msgs(args.send_list)
-        elif args.file:
-            # sends files to file helper
-            send_files(args.send_list)
+        send(args.send_list)
     elif args.receive:
-        if args.text:
-            # logs in wechat
-            login()
-
-            # receives text messages from file helper
-            receive_text_msgs()
-        elif args.file:
-            # checks if the path exists
-            if not os.path.exists(args.path):
-                print("wechat_file_helper.py: error: path not exists")
-                exit(1)
-
-            # logs in wechat
-            login()
-
-            # receives files from file helper
-            receive_files(args.path)
+        receive(args.path)
