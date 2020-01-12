@@ -18,7 +18,7 @@ def send(send_list):
 
             itchat.send(msg, toUserName="filehelper")
 
-            print("done")
+        print("done")
 
     logout()
 
