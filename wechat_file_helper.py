@@ -8,6 +8,8 @@ import itchat
 
 
 def send(send_list):
+    login()
+
     for msg in send_list[0]:
         if os.path.isfile(msg):  # sends files
             print("sending file: {}".format(msg))
@@ -24,6 +26,8 @@ def send(send_list):
 
 
 def receive(dest_file_path):
+    login()
+
     print("receiving messages")
 
     @itchat.msg_register(["Text", "Picture", "Recording", "Attachment", "Video"])
@@ -68,8 +72,6 @@ if __name__ == '__main__':
     if args.path and not os.path.exists(args.path):
         print("wechat_file_helper.py: error: path not exists")
         exit(1)
-
-    login()
 
     if args.send_list:
         send(args.send_list)
