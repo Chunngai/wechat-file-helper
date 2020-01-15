@@ -10,7 +10,7 @@ import itchat
 def send(send_list):
     login()
 
-    for msg in send_list[0]:
+    for msg in send_list:
         if os.path.isfile(msg):  # sends files
             print("sending file: {}".format(msg))
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
                                                  + "text messages and files from wechat file helper")
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--send", "-s", action="append", nargs="+", dest="send_list",
+    group.add_argument("--send", "-s", action="store", nargs="+", dest="send_list",
                        help="send text messages or files")
     group.add_argument("--receive", "-r", action="store_true", help="receive text messages or files")
 
